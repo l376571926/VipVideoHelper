@@ -1,9 +1,12 @@
 package group.tonight.vipvideohelper;
 
+import android.app.ProgressDialog;
+import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +20,18 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private WebView mWebView;
     private String mCurrentVideoUrl;
+    private TextView mWebUrlView;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,38 +44,12 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
-                if (TextUtils.isEmpty(mCurrentVideoUrl)) {
-                    Toast.makeText(HomeActivity.this, "视频链接为空，稍候再试", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                new AlertDialog.Builder(HomeActivity.this)
-                        .setTitle("即将播放")
-                        .setMessage(mCurrentVideoUrl)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                                intent.putExtra("videoUrl", mCurrentVideoUrl);
-//                                intent.putExtra("position", position);
-                                startActivityForResult(intent, 0);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .show();
+                parse();
             }
         });
 
 
+        mWebUrlView = (TextView) findViewById(R.id.web_url);
         //http://jx.598110.com/index.php?url=https://v.qq.com/x/cover/y23mfuucvc2ihmy/90pXxfhH6mP.html?ptag=iqiyi
         mWebView = (WebView) findViewById(R.id.web_view);
 
@@ -78,7 +61,38 @@ public class HomeActivity extends AppCompatActivity {
 
 
         String url = "http://m.iqiyi.com/";
+//        String url = "www.pokonyan.cn/video/index.html";
         mWebView.loadUrl(url);
+
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+    }
+
+    private void parse() {
+        mProgressDialog.show();
+        VideoUrlLiveData liveData = new VideoUrlLiveData(mCurrentVideoUrl);
+        liveData.observe(HomeActivity.this, new Observer<List<String>>() {
+            @Override
+            public void onChanged(@Nullable final List<String> strings) {
+                mProgressDialog.dismiss();
+                if (strings == null) {
+                    return;
+                }
+                new AlertDialog.Builder(HomeActivity.this)
+                        .setSingleChoiceItems(strings.toArray(new String[strings.size()]), 0, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                                intent.putExtra("videoUrl", strings.get(i));
+                                startActivityForResult(intent, 0);
+
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     private WebViewClient mWebViewClient = new WebViewClient() {
@@ -93,6 +107,24 @@ public class HomeActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
             Log.e(TAG, "onPageFinished: " + url);
             mCurrentVideoUrl = url;
+            mWebUrlView.setText(url);
+            if (url.endsWith(".html")) {
+                new AlertDialog.Builder(HomeActivity.this)
+                        .setMessage("检测到可播放视频，是否开始解析？")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                parse();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+            }
         }
 
         @Override

@@ -33,14 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+//        webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
 
         mWebView.setWebViewClient(mWebViewClient);
         mWebView.setWebChromeClient(mWebChromeClient);
 
-        String url = HOST_1 + "http://www.iqiyi.com/v_19rrcd03uk.html";
+        String url = DEFAULT_PARSE_URL + "http://www.iqiyi.com/v_19rrcd03uk.html";
         if (getIntent().hasExtra("videoUrl")) {
             url = getIntent().getStringExtra("videoUrl");
-            url = HOST_1 + url;
+//            url = DEFAULT_PARSE_URL + url;
         }
         mWebView.loadUrl(url);
 

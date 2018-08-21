@@ -4,6 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Consts {
+    public static final String[] xianlu = {
+            "http://jx.598110.com/index.php?url="
+            , "http://jx.598110.com/duo/index.php?url="
+            , "http://jx.598110.com/zuida.php?url="
+            , "http://jx.aeidu.cn/index.php?url="
+    };
+    public static final String[] xianluming = {
+            "华南线路①"
+            , "华南线路②"
+            , "华北线路③"
+            , "华中线路④"};
+
     private static Map<String, String> paserUrlMap = new HashMap<>();
 
     static {
