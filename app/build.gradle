@@ -27,9 +27,6 @@ android {
             signingConfig signingConfigs.config
         }
     }
-//    configurations.all {
-//        resolutionStrategy.force 'com.android.support:support-v4:24.0.0'
-//    }
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
