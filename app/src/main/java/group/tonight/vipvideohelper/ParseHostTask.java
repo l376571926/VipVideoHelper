@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -19,7 +18,6 @@ public class ParseHostTask extends AsyncTask<Void, Void, Void> {
     private static final String TAG = ParseHostTask.class.getSimpleName();
     private static final String XIONG_HAI_ZI = "http://www.pokonyan.cn/video/index.html";
     private static final String aaaa = "http://www.pokonyan.cn/video/js/index.js?v1.3";
-    private OkHttpClient okHttpClient = new OkHttpClient();
 
     @Override
     protected Void doInBackground(Void... voids) {
@@ -33,7 +31,7 @@ public class ParseHostTask extends AsyncTask<Void, Void, Void> {
                     .url(videoUrl)
                     .build();
             try {
-                Response response = okHttpClient.newCall(request).execute();
+                Response response = App.getOkHttpClient().newCall(request).execute();
 
                 ResponseBody responseBody = response.body();
                 MediaType mediaType = responseBody.contentType();

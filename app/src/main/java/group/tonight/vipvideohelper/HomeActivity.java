@@ -1,11 +1,14 @@
 package group.tonight.vipvideohelper;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +24,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -29,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     private String mCurrentVideoUrl;
     private TextView mWebUrlView;
     private ProgressDialog mProgressDialog;
+    private SharedPreferences mPreferences;
+    private DownloadManager mDownloadManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,52 @@ public class HomeActivity extends AppCompatActivity {
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+
+        VersionUpdater versionUpdater = new VersionUpdater();
+        versionUpdater.observe(this, new Observer<VersionUpdateBean.AssetsBean>() {
+            @Override
+            public void onChanged(@Nullable final VersionUpdateBean.AssetsBean assetsBean) {
+                if (assetsBean == null) {
+                    return;
+                }
+                final String content_type = assetsBean.getContent_type();
+                final String browser_download_url = assetsBean.getBrowser_download_url();
+                int id = assetsBean.getId();
+                int lastVersionId = mPreferences.getInt(Consts.KEY_LAST_VERSION_ID, 0);
+                if (lastVersionId < id) {
+                    new AlertDialog.Builder(HomeActivity.this)
+                            .setMessage("发现新版本，是否马上更新？")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    AndPermission.with(HomeActivity.this)
+                                            .runtime()
+                                            .permission(Permission.Group.STORAGE)
+                                            .onGranted(new Action<List<String>>() {
+                                                @Override
+                                                public void onAction(List<String> data) {
+                                                    Intent service = new Intent(HomeActivity.this, DownLoadService.class);
+                                                    service.putExtra(DownLoadService.EXTRA_DATA, assetsBean);
+                                                    startService(service);
+                                                }
+                                            })
+                                            .start();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .show();
+
+                }
+            }
+        });
     }
 
     private void parse() {

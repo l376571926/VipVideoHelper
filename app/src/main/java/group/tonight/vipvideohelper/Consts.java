@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Consts {
+    public static final String KEY_LAST_VERSION_ID = "pref_last_version_id";
+    public static final String KEY_LAST_DOWNLOAD_ID = "pref_last_download_id";
+
     public static final String[] xianlu = {
             "http://jx.598110.com/index.php?url="
             , "http://jx.598110.com/duo/index.php?url="

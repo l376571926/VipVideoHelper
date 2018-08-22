@@ -6,10 +6,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -17,17 +15,10 @@ import okhttp3.ResponseBody;
 
 public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable {
     private static final String TAG = VideoUrlLiveData.class.getSimpleName();
-    private OkHttpClient okHttpClient;
     private String vipVideoUrl;
 
     public VideoUrlLiveData(String vipVideoUrl) {
         this.vipVideoUrl = vipVideoUrl;
-        okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(50, TimeUnit.MILLISECONDS)
-                .readTimeout(50, TimeUnit.MILLISECONDS)
-                .writeTimeout(50, TimeUnit.MILLISECONDS)
-                .build();
-
         new Thread(this).start();
     }
 
@@ -54,7 +45,7 @@ public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable
                     .url(videoUrl)
                     .build();
             try {
-                Response response = okHttpClient.newCall(request).execute();
+                Response response = App.getOkHttpClient().newCall(request).execute();
                 int code = response.code();
                 String message = response.message();
                 ResponseBody responseBody = response.body();
