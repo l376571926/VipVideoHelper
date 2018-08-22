@@ -15,7 +15,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -41,6 +41,6 @@ dependencies {
     //    implementation "com.mikepenz:iconics-core:3.1.0-rc01"
     //    implementation "androidx.appcompat:appcompat:${versions.androidXVersion}"
     //    implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
-    implementation 'org.jsoup:jsoup:1.11.3'
+//    implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 }

@@ -14,6 +14,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+
 public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable {
     private static final String TAG = VideoUrlLiveData.class.getSimpleName();
     private OkHttpClient okHttpClient;
@@ -54,13 +55,17 @@ public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable
                     .build();
             try {
                 Response response = okHttpClient.newCall(request).execute();
-
+                int code = response.code();
+                String message = response.message();
                 ResponseBody responseBody = response.body();
                 MediaType mediaType = responseBody.contentType();
                 long contentLength = responseBody.contentLength();
-                Log.e(TAG, "doInBackground: " + i + " " + mediaType + " " + contentLength + " " + videoUrl);
+                Log.e(TAG, "doInBackground: " + i + " " + code + " " + message + " " + mediaType + " " + contentLength + " " + videoUrl);
 
-                availabel.add(videoUrl);
+                if (code == 200) {//过滤非200请求
+                    availabel.add(videoUrl);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e(TAG, "doInBackground: " + i + " " + videoUrl + " " + e.getMessage());

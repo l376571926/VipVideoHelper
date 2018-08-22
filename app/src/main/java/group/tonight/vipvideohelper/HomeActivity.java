@@ -11,7 +11,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,9 +20,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -79,8 +76,9 @@ public class HomeActivity extends AppCompatActivity {
                 if (strings == null) {
                     return;
                 }
+                String[] urlArray = strings.toArray(new String[strings.size()]);
                 new AlertDialog.Builder(HomeActivity.this)
-                        .setSingleChoiceItems(strings.toArray(new String[strings.size()]), 0, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(urlArray, 0, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent intent = new Intent(HomeActivity.this, MainActivity.class);
@@ -100,6 +98,7 @@ public class HomeActivity extends AppCompatActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             Log.e(TAG, "onPageStarted: " + url);
+            mProgressDialog.show();
         }
 
         @Override
@@ -108,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.e(TAG, "onPageFinished: " + url);
             mCurrentVideoUrl = url;
             mWebUrlView.setText(url);
+            mProgressDialog.dismiss();
             if (url.endsWith(".html")) {
                 new AlertDialog.Builder(HomeActivity.this)
                         .setMessage("检测到可播放视频，是否开始解析？")
