@@ -24,6 +24,7 @@ public class DownLoadService extends Service {
         VersionUpdateBean.AssetsBean assetsBean = (VersionUpdateBean.AssetsBean) intent.getSerializableExtra(EXTRA_DATA);
         String browser_download_url = assetsBean.getBrowser_download_url();
         String content_type = assetsBean.getContent_type();
+        int assetsBeanId = assetsBean.getId();
 
         String DOWNLOADPATH = "/demo/apk/";
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + DOWNLOADPATH + "demo.apk";
@@ -48,6 +49,7 @@ public class DownLoadService extends Service {
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .edit()
                         .putLong(Consts.KEY_LAST_DOWNLOAD_ID, manager.enqueue(down))
+                        .putInt(Consts.KEY_LAST_VERSION_ID, assetsBeanId)
                         .apply();
             }
         } catch (Exception e) {

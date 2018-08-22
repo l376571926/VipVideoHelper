@@ -86,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 final String content_type = assetsBean.getContent_type();
                 final String browser_download_url = assetsBean.getBrowser_download_url();
-                int id = assetsBean.getId();
+                final int id = assetsBean.getId();
                 int lastVersionId = mPreferences.getInt(Consts.KEY_LAST_VERSION_ID, 0);
                 if (lastVersionId < id) {
                     new AlertDialog.Builder(HomeActivity.this)
