@@ -15,7 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlayActivity"></activity>
+        <activity
+            android:name=".PlayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor">
+
+        </activity>
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">

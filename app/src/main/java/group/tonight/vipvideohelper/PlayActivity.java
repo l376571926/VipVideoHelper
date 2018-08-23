@@ -2,12 +2,15 @@ package group.tonight.vipvideohelper;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -32,6 +35,14 @@ public class PlayActivity extends BaseBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+//            this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
+//            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
+//        } else {
+//            requestWindowFeature(Window.FEATURE_ACTION_BAR);
+//        }
+
         setContentView(R.layout.activity_play);
         //http://jx.598110.com/index.php?url=http://m.iqiyi.com/v_19rr24dq6c.html
         //http://jx.598110.com/index.php?url=https://v.qq.com/x/cover/y23mfuucvc2ihmy/90pXxfhH6mP.html?ptag=iqiyi
@@ -60,6 +71,31 @@ public class PlayActivity extends BaseBackActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_play_activity, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.e(TAG, "onConfigurationChanged: " + newConfig.orientation);
+        boolean fullScreen = newConfig.orientation != Configuration.ORIENTATION_PORTRAIT;
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            if (fullScreen) {
+                supportActionBar.hide();
+            } else {
+                supportActionBar.show();
+            }
+        }
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        if (fullScreen) {
+            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            getWindow().setAttributes(attrs);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        } else {
+            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setAttributes(attrs);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
     }
 
     @Override
