@@ -1,17 +1,22 @@
 package group.tonight.vipvideohelper;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+import java.util.List;
+
+public class PlayActivity extends BaseBackActivity {
+    private static final String TAG = PlayActivity.class.getSimpleName();
     private static final String DEFAULT_PARSE_URL = "http://yun.baiyug.cn/vip/index.php?url=";
 
     //熊孩子视频可选vip解析服务器
@@ -22,11 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView mWebView;
     private ProgressDialog mDialog;
+    private List<String> mVideoUrlList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_play);
         //http://jx.598110.com/index.php?url=http://m.iqiyi.com/v_19rr24dq6c.html
         //http://jx.598110.com/index.php?url=https://v.qq.com/x/cover/y23mfuucvc2ihmy/90pXxfhH6mP.html?ptag=iqiyi
         mWebView = (WebView) findViewById(R.id.web_view);
@@ -36,16 +42,45 @@ public class MainActivity extends AppCompatActivity {
 //        webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
 
         mWebView.setWebViewClient(mWebViewClient);
-        mWebView.setWebChromeClient(mWebChromeClient);
+        mWebView.setWebChromeClient(new WebChromeClient());
 
         String url = DEFAULT_PARSE_URL + "http://www.iqiyi.com/v_19rrcd03uk.html";
-        if (getIntent().hasExtra("videoUrl")) {
+        if (getIntent().hasExtra("videoUrlList")) {
+            mVideoUrlList = getIntent().getStringArrayListExtra("videoUrlList");
+            url = mVideoUrlList.get(0);
+        } else if (getIntent().hasExtra("videoUrl")) {
             url = getIntent().getStringExtra("videoUrl");
-//            url = DEFAULT_PARSE_URL + url;
         }
         mWebView.loadUrl(url);
 
         mDialog = new ProgressDialog(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_play_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_select) {
+            if (mVideoUrlList != null) {
+                if (!mVideoUrlList.isEmpty()) {
+                    String[] urlArray = mVideoUrlList.toArray(new String[mVideoUrlList.size()]);
+                    new AlertDialog.Builder(PlayActivity.this)
+                            .setSingleChoiceItems(urlArray, 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    mWebView.loadUrl(mVideoUrlList.get(i));
+                                }
+                            })
+                            .show();
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -73,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            Log.e(TAG, "onPageStarted: " + url);
+            Log.d(TAG, "onPageStarted: " + url);
             mDialog.show();
         }
 
@@ -85,19 +120,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onLoadResource(WebView view, String url) {
-            super.onLoadResource(view, url);
-            Log.d(TAG, "onLoadResource: " + url);
-        }
-
-        @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.e(TAG, "shouldOverrideUrlLoading: " + url);
+            Log.d(TAG, "shouldOverrideUrlLoading: " + url);
             return super.shouldOverrideUrlLoading(view, url);
         }
     };
 
-    private WebChromeClient mWebChromeClient = new WebChromeClient() {
-
-    };
 }

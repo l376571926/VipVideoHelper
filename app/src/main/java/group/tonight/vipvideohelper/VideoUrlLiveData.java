@@ -48,18 +48,18 @@ public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable
                 Response response = App.getOkHttpClient().newCall(request).execute();
                 int code = response.code();
                 String message = response.message();
-                ResponseBody responseBody = response.body();
-                MediaType mediaType = responseBody.contentType();
-                long contentLength = responseBody.contentLength();
-                Log.e(TAG, "doInBackground: " + i + " " + code + " " + message + " " + mediaType + " " + contentLength + " " + videoUrl);
 
                 if (code == 200) {//过滤非200请求
+                    ResponseBody responseBody = response.body();
+                    MediaType mediaType = responseBody.contentType();
+                    long contentLength = responseBody.contentLength();
+                    Log.e(TAG, "doInBackground: " + i + " " + code + " " + message + " " + mediaType + " " + contentLength + " " + videoUrl);
                     availabel.add(videoUrl);
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "doInBackground: " + i + " " + videoUrl + " " + e.getMessage());
+                Log.d(TAG, "doInBackground: " + i + " " + videoUrl + " " + e.getMessage());
             }
         }
         postValue(availabel);
