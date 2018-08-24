@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.other;
 
 import java.util.HashMap;
 import java.util.Map;

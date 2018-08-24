@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -17,6 +17,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.util.List;
+
+import group.tonight.vipvideohelper.R;
 
 public class PlayActivity extends BaseBackActivity {
     private static final String TAG = PlayActivity.class.getSimpleName();

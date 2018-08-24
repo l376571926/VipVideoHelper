@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.activities;
 
 import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
@@ -18,6 +18,12 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 
 import java.util.List;
+
+import group.tonight.vipvideohelper.other.Consts;
+import group.tonight.vipvideohelper.DownLoadService;
+import group.tonight.vipvideohelper.R;
+import group.tonight.vipvideohelper.VersionUpdateBean;
+import group.tonight.vipvideohelper.VersionUpdater;
 
 public class SettingActivity extends BaseBackActivity {
 

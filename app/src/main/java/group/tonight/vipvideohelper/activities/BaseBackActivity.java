@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

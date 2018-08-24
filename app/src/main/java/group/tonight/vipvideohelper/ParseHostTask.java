@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import group.tonight.vipvideohelper.other.VipBaseUrlProvider;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;

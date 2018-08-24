@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import group.tonight.vipvideohelper.other.Consts;
+
 public class GlobalBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

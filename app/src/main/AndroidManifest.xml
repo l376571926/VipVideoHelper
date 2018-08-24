@@ -16,13 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".PlayActivity"
+            android:name=".activities.PlayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor">
-
-        </activity>
+            android:screenOrientation="sensor"></activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,7 +48,11 @@
 
         <service android:name=".DownLoadService" />
 
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".activities.SettingActivity" />
+        <activity
+            android:name=".activities.BaiduActivity"
+            android:label="@string/title_activity_baidu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

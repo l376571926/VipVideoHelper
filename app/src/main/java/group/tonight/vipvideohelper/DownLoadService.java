@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import group.tonight.vipvideohelper.other.Consts;
+
 /**
  * 更新APP
  */

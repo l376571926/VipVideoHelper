@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.activities;
 
 import android.app.ProgressDialog;
 import android.arch.lifecycle.Observer;
@@ -29,6 +29,13 @@ import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import group.tonight.vipvideohelper.other.Consts;
+import group.tonight.vipvideohelper.DownLoadService;
+import group.tonight.vipvideohelper.R;
+import group.tonight.vipvideohelper.VersionUpdateBean;
+import group.tonight.vipvideohelper.VersionUpdater;
+import group.tonight.vipvideohelper.VideoUrlLiveData;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();

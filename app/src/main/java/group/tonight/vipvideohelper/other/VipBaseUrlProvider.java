@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.other;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,28 +19,28 @@ public class VipBaseUrlProvider {
 
     private void init() {
         //熊孩子
-        map.put("http://jx.598110.com/index.php?url=", "华南线路①");//慢
+        map.put("http://jx.598110.com/index.php?url=", "华南线路①");//慢http://www.598110.com/
         map.put("http://jx.598110.com/duo/index.php?url=", "华南线路②");
         map.put("http://jx.598110.com/zuida.php?url=", "华北线路③");//稍慢
         map.put("http://jx.aeidu.cn/index.php?url=", "华中线路④");//稍慢
 
         //http://www.5ifxw.com/vip/
-        map.put("http://api.xiaomil.com/a/index.php?url=", "选择接口");
+        map.put("http://api.xiaomil.com/a/index.php?url=", "选择接口");//http://api.xiaomil.com/
         map.put("http://api.wlzhan.com/sudu/?url=", "万能接口1");
         map.put("http://jiexi.071811.cc/jx2.php?url=", "万能接口3");
         map.put("http://jqaaa.com/jq3/?url=&url=", "万能接口4");
         map.put("https://jiexi.071811.cc/jx2.php?url=", "万能接口6");
         map.put("http://api.pucms.com/?url=", "爱奇艺超清接口1");
-        map.put("http://api.baiyug.cn/vip/index.php?url=", "爱奇艺超清接口2");
+        map.put("http://api.baiyug.cn/vip/index.php?url=", "爱奇艺超清接口2");//http://yun.baiyug.cn/
         map.put("https://api.flvsp.com/?url=", "爱奇艺超清接口3");
-        map.put("http://api.xfsub.com/index.php?url=", "芒果TV超清接口");
+        map.put("http://api.xfsub.com/index.php?url=", "芒果TV超清接口");//http://api.xfsub.com/
         map.put("http://65yw.2m.vc/chaojikan.php?url=", "芒果TV手机接口");
         map.put("http://www.82190555.com/index/qqvod.php?url=", "优酷超清接口");
         map.put("http://vip.jlsprh.com/index.php?url=", "搜狐视频接口");
         map.put("http://2gty.com/apiurl/yun.php?url=", "乐视视频接口");
 
         //小七科技http://peng3.com/vip/
-        map.put("http://yun.baiyug.cn/vip/index.php?url=", "1号vip解析接口【小七科技】");
+        map.put("http://yun.baiyug.cn/vip/index.php?url=", "1号vip解析接口【小七科技】");//http://yun.baiyug.cn/
         map.put("http://api.123zx.net/m3u8/play.html?id=", "2号vip解析接口【小七科技】");
         map.put("http://jx.618g.com/?url=", "4号vip解析接口【小七科技】");
         map.put("http://aikan-tv.com/?url=", "5号vip解析接口【小七科技】");
