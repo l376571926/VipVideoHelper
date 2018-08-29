@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,15 +22,17 @@ import com.yanzhenjie.permission.Permission;
 
 import java.util.List;
 
-import group.tonight.vipvideohelper.other.Consts;
 import group.tonight.vipvideohelper.DownLoadService;
 import group.tonight.vipvideohelper.R;
 import group.tonight.vipvideohelper.VersionUpdateBean;
 import group.tonight.vipvideohelper.VersionUpdater;
+import group.tonight.vipvideohelper.other.Consts;
+import group.tonight.vipvideohelper.other.QRCode;
 
 public class SettingActivity extends BaseBackActivity {
 
     private TextView mVersionTextView;
+    private ImageView mShareAppImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,22 @@ public class SettingActivity extends BaseBackActivity {
         setContentView(R.layout.activity_setting);
 
         mVersionTextView = (TextView) findViewById(R.id.version);
+        mShareAppImageView = (ImageView) findViewById(R.id.share_app);
+
+        VersionUpdater versionUpdater = new VersionUpdater();
+        versionUpdater.observe(this, new Observer<VersionUpdateBean.AssetsBean>() {
+            @Override
+            public void onChanged(@Nullable VersionUpdateBean.AssetsBean assetsBean) {
+                if (assetsBean == null) {
+                    return;
+                }
+                String mBrowser_download_url = assetsBean.getBrowser_download_url();
+
+                Bitmap bitmap = QRCode.createQRCodeWithLogo(mBrowser_download_url, 500, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+                mShareAppImageView.setImageBitmap(bitmap);
+            }
+        });
+
         mVersionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +67,7 @@ public class SettingActivity extends BaseBackActivity {
                             return;
                         }
                         final String content_type = assetsBean.getContent_type();
-                        final String browser_download_url = assetsBean.getBrowser_download_url();
+
                         final int id = assetsBean.getId();
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
                         int lastVersionId = preferences.getInt(Consts.KEY_LAST_VERSION_ID, 0);

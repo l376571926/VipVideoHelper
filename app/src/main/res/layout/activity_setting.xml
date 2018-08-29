@@ -8,22 +8,29 @@
     android:paddingTop="8dp"
     tools:context=".activities.SettingActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:listDivider" />
 
     <TextView
         android:id="@+id/version"
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightSmall"
+        android:background="@android:color/white"
         android:gravity="center_vertical"
         android:paddingLeft="?android:listPreferredItemPaddingLeft"
         android:paddingRight="?android:listPreferredItemPaddingRight"
         android:text="当前版本：1.0" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:listDivider" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="好东西应该值得被分享" />
+
+    <ImageView
+        android:id="@+id/share_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:src="@mipmap/ic_launcher" />
 </LinearLayout>
