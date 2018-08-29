@@ -95,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
+        // TODO: 2018/8/29 替换为腾讯X5WebView
         //http://jx.598110.com/index.php?url=https://v.qq.com/x/cover/y23mfuucvc2ihmy/90pXxfhH6mP.html?ptag=iqiyi
         mWebView = (WebView) findViewById(R.id.web_view);
         mWebView.setWebViewClient(mWebViewClient);

@@ -27,11 +27,11 @@ public class VipBaseUrlProvider {
         //http://www.5ifxw.com/vip/
         map.put("http://api.xiaomil.com/a/index.php?url=", "选择接口");//http://api.xiaomil.com/
         map.put("http://api.wlzhan.com/sudu/?url=", "万能接口1");
+
         map.put("http://jiexi.071811.cc/jx2.php?url=", "万能接口3");
         map.put("http://jqaaa.com/jq3/?url=&url=", "万能接口4");
         map.put("https://jiexi.071811.cc/jx2.php?url=", "万能接口6");
         map.put("http://api.pucms.com/?url=", "爱奇艺超清接口1");
-        map.put("http://api.baiyug.cn/vip/index.php?url=", "爱奇艺超清接口2");//http://yun.baiyug.cn/
         map.put("https://api.flvsp.com/?url=", "爱奇艺超清接口3");
         map.put("http://api.xfsub.com/index.php?url=", "芒果TV超清接口");//http://api.xfsub.com/
         map.put("http://65yw.2m.vc/chaojikan.php?url=", "芒果TV手机接口");
@@ -39,8 +39,12 @@ public class VipBaseUrlProvider {
         map.put("http://vip.jlsprh.com/index.php?url=", "搜狐视频接口");
         map.put("http://2gty.com/apiurl/yun.php?url=", "乐视视频接口");
 
-        //小七科技http://peng3.com/vip/
+        //百域学院
+        map.put("http://api.baiyug.cn/vip/index.php?url=", "爱奇艺超清接口2");//http://yun.baiyug.cn/
+        map.put("http://yun.baiyug.cn/vip/?url=","百域学院");
         map.put("http://yun.baiyug.cn/vip/index.php?url=", "1号vip解析接口【小七科技】");//http://yun.baiyug.cn/
+
+        //小七科技http://peng3.com/vip/
         map.put("http://api.123zx.net/m3u8/play.html?id=", "2号vip解析接口【小七科技】");
         map.put("http://jx.618g.com/?url=", "4号vip解析接口【小七科技】");
         map.put("http://aikan-tv.com/?url=", "5号vip解析接口【小七科技】");
@@ -94,6 +98,10 @@ public class VipBaseUrlProvider {
         map.put("http://qtv.soshane.com/ko.php?url=", "万能接口14");
         map.put("http://api.pucms.com/index.php?url=", "万能接口15");
         map.put("http://www.vipjiexi.com/tong.php?url=", "万能接口17");
+
+        map.put("http://dingdang-tv.com/jx?url=","万能接口18");
+        map.put("http://jx.api.163ren.com/vod.php?url=","万能接口19");
+        map.put("http://www.82190555.com/video.php?url=","万能接口20");
     }
 
     public List<String> getAll() {
