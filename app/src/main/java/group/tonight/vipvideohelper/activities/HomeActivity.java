@@ -10,15 +10,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
+import android.view.inputmethod.EditorInfo;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -30,18 +33,19 @@ import com.yanzhenjie.permission.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
-import group.tonight.vipvideohelper.other.Consts;
 import group.tonight.vipvideohelper.DownLoadService;
 import group.tonight.vipvideohelper.R;
 import group.tonight.vipvideohelper.VersionUpdateBean;
 import group.tonight.vipvideohelper.VersionUpdater;
 import group.tonight.vipvideohelper.VideoUrlLiveData;
+import group.tonight.vipvideohelper.other.Consts;
+import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private WebView mWebView;
     private String mCurrentVideoUrl;
-    private TextView mWebUrlView;
+    private TextInputEditText mWebUrlTextView;
     private ProgressDialog mProgressDialog;
     private SharedPreferences mPreferences;
 
@@ -75,21 +79,33 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        mWebUrlView = (TextView) findViewById(R.id.web_url);
+        mWebUrlTextView = (TextInputEditText) findViewById(R.id.web_url);
+        mWebUrlTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    String url = v.getText().toString();
+                    Log.e(TAG, "onEditorAction: " + url);
+                    if (!TextUtils.isEmpty(url)) {
+                        mWebView.loadUrl(url);
+                    }
+                }
+                return false;
+            }
+        });
+
+
         //http://jx.598110.com/index.php?url=https://v.qq.com/x/cover/y23mfuucvc2ihmy/90pXxfhH6mP.html?ptag=iqiyi
         mWebView = (WebView) findViewById(R.id.web_view);
-
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-
         mWebView.setWebViewClient(mWebViewClient);
-        mWebView.setWebChromeClient(new WebChromeClient());
 
+        WebViewHelper webViewHelper = new WebViewHelper(mWebView);
+        webViewHelper.setWebView();
+        webViewHelper.setWebChromeClient();
 
         String url = "http://m.iqiyi.com/";
 //        String url = "www.pokonyan.cn/video/index.html";
         mWebView.loadUrl(url);
-
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -150,8 +166,20 @@ public class HomeActivity extends AppCompatActivity {
             super.onPageFinished(view, url);
             Log.e(TAG, "onPageFinished: " + url);
             mCurrentVideoUrl = url;
-            mWebUrlView.setText(url);
+            mWebUrlTextView.setText(url);
             mProgressDialog.dismiss();
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+
+            return super.shouldOverrideUrlLoading(view, request);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Log.e(TAG, "shouldOverrideUrlLoading: " + url);
+            return super.shouldOverrideUrlLoading(view, url);
         }
     };
 
@@ -183,6 +211,22 @@ public class HomeActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.action_select_site:
+                final String[] urlArray = {
+                        "http://m.iqiyi.com/",
+                        "http://m.v.qq.com/",
+                        "https://www.youku.com",
+                };
+                new AlertDialog.Builder(this)
+                        .setSingleChoiceItems(urlArray, 0, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mWebView.loadUrl(urlArray[which]);
+                                dialog.dismiss();
                             }
                         })
                         .show();

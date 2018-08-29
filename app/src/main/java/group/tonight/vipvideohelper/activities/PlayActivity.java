@@ -11,14 +11,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.util.List;
 
 import group.tonight.vipvideohelper.R;
+import group.tonight.vipvideohelper.other.PrefUtils;
+import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class PlayActivity extends BaseBackActivity {
     private static final String TAG = PlayActivity.class.getSimpleName();
@@ -37,36 +37,31 @@ public class PlayActivity extends BaseBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-//            this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
-//            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
-//        } else {
-//            requestWindowFeature(Window.FEATURE_ACTION_BAR);
-//        }
-
         setContentView(R.layout.activity_play);
         //http://jx.598110.com/index.php?url=http://m.iqiyi.com/v_19rr24dq6c.html
         //http://jx.598110.com/index.php?url=https://v.qq.com/x/cover/y23mfuucvc2ihmy/90pXxfhH6mP.html?ptag=iqiyi
         mWebView = (WebView) findViewById(R.id.web_view);
-
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-//        webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
-
         mWebView.setWebViewClient(mWebViewClient);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        WebViewHelper webViewHelper = new WebViewHelper(mWebView);
+        webViewHelper.setWebView();
+        webViewHelper.setWebChromeClient();
 
         String url = DEFAULT_PARSE_URL + "http://www.iqiyi.com/v_19rrcd03uk.html";
         if (getIntent().hasExtra("videoUrlList")) {
             mVideoUrlList = getIntent().getStringArrayListExtra("videoUrlList");
-            url = mVideoUrlList.get(0);
+            int lastParseIndex = PrefUtils.get().getInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, 0);
+            if (lastParseIndex < mVideoUrlList.size()) {
+                url = mVideoUrlList.get(lastParseIndex);
+            } else {
+                url = mVideoUrlList.get(0);
+            }
         } else if (getIntent().hasExtra("videoUrl")) {
             url = getIntent().getStringExtra("videoUrl");
         }
         mWebView.loadUrl(url);
 
         mDialog = new ProgressDialog(this);
+        mDialog.setMessage("请稍候。。。");
     }
 
     @Override
@@ -106,12 +101,20 @@ public class PlayActivity extends BaseBackActivity {
             if (mVideoUrlList != null) {
                 if (!mVideoUrlList.isEmpty()) {
                     String[] urlArray = mVideoUrlList.toArray(new String[mVideoUrlList.size()]);
+                    int index = PrefUtils.get().getInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, 0);
+                    if (index >= urlArray.length) {
+                        index = 0;
+                    }
                     new AlertDialog.Builder(PlayActivity.this)
-                            .setSingleChoiceItems(urlArray, 0, new DialogInterface.OnClickListener() {
+                            .setSingleChoiceItems(urlArray, index, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.dismiss();
                                     mWebView.loadUrl(mVideoUrlList.get(i));
+                                    PrefUtils.get()
+                                            .edit()
+                                            .putInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, i)
+                                            .apply();
                                 }
                             })
                             .show();

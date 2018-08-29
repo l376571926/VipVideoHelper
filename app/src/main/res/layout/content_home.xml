@@ -9,14 +9,29 @@
     tools:context=".activities.HomeActivity"
     tools:showIn="@layout/activity_home">
 
-    <TextView
-        android:id="@+id/web_url"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/web_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="当前网址"
+            android:imeOptions="actionGo"
+            android:inputType="textWebEditText"
+            android:textSize="12sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightSmall"
+        android:gravity="center_vertical"
         android:paddingLeft="?android:listPreferredItemPaddingLeft"
         android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:text="当前网址" />
+        android:text="当前网址"
+        android:visibility="gone" />
 
     <WebView
         android:id="@+id/web_view"

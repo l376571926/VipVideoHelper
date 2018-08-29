@@ -13,5 +13,10 @@
         android:icon="@drawable/help_circle_outline"
         android:title="帮助"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_select_site"
+        android:icon="@drawable/format_list_bulleted"
+        android:title="选择视频网站"
+        app:showAsAction="ifRoom" />
 
 </menu>

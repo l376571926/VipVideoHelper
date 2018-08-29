@@ -4,6 +4,7 @@ import android.app.Application;
 
 import java.util.concurrent.TimeUnit;
 
+import group.tonight.vipvideohelper.other.PrefUtils;
 import okhttp3.OkHttpClient;
 
 public class App extends Application {
@@ -12,6 +13,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        PrefUtils.init(this);
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(2000, TimeUnit.MILLISECONDS)
                 .readTimeout(2000, TimeUnit.MILLISECONDS)
