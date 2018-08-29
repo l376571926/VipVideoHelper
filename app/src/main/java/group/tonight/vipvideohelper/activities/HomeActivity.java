@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.yanzhenjie.permission.Action;
@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private WebView mWebView;
     private String mCurrentVideoUrl;
-    private TextInputEditText mWebUrlTextView;
+    private EditText mWebUrlTextView;
     private ProgressDialog mProgressDialog;
     private SharedPreferences mPreferences;
 
@@ -79,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        mWebUrlTextView = (TextInputEditText) findViewById(R.id.web_url);
+        mWebUrlTextView = (EditText) findViewById(R.id.web_url);
         mWebUrlTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

@@ -13,8 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
-
-        <android.support.design.widget.TextInputEditText
+        <!--
+        魅蓝U10用android.support.design.widget.TextInputEditText会闪退
+        https://stackoverflow.com/questions/51891415/nullpointerexception-on-meizu-devices-in-editor-updatecursorpositionmz
+        -->
+        <EditText
             android:id="@+id/web_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
