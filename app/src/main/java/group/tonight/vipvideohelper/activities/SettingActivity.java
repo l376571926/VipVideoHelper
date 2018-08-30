@@ -51,7 +51,7 @@ public class SettingActivity extends BaseBackActivity {
                 }
                 String mBrowser_download_url = assetsBean.getBrowser_download_url();
 
-                Bitmap bitmap = QRCodeUtils.createQRCodeWithLogo(mBrowser_download_url, 500, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+                Bitmap bitmap = QRCodeUtils.createQRCodeWithLogo(mBrowser_download_url, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
                 mShareAppImageView.setImageBitmap(bitmap);
             }
         });
