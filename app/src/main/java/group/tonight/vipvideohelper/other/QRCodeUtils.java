@@ -21,8 +21,9 @@ import java.util.Hashtable;
  * © 2016 jinwenfeng
  * ©版权所有，未经允许不得传播
  */
-public class QRCode {
+public class QRCodeUtils {
     private static int IMAGE_HALFWIDTH = 50;//宽度值，影响中间图片大小
+
     /**
      * 生成二维码，默认大小为500*500
      *
@@ -43,22 +44,39 @@ public class QRCode {
     public static Bitmap createQRCode(String text, int size) {
         try {
             Hashtable<EncodeHintType, String> hints = new Hashtable<>();
-            hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-            BitMatrix bitMatrix = new QRCodeWriter().encode(text,
-                    BarcodeFormat.QR_CODE, size, size, hints);
+
+            /**
+             * 字符集/字符转码格式 (支持格式:{@link CharacterSetECI })。传null时,zxing源码默认使用 "ISO-8859-1"
+             */
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");// 字符转码格式设置
+            /**
+             * 容错级别 (支持级别:{@link ErrorCorrectionLevel })。传null时,zxing源码默认使用 "L"
+             */
+            hints.put(EncodeHintType.ERROR_CORRECTION, "H"); // 容错级别设置
+            /**
+             * 空白边距 (可修改,要求:整型且>=0), 传null时,zxing源码默认使用"4"。
+             */
+            hints.put(EncodeHintType.MARGIN, "2"); // 空白边距设置
+
+            BitMatrix bitMatrix = new QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints);
             int[] pixels = new int[size * size];
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     if (bitMatrix.get(x, y)) {
-                        pixels[y * size + x] = 0xff000000;
+                        /**
+                         * 黑色色块的自定义颜色值
+                         */
+                        pixels[y * size + x] = 0xff000000;// 黑色色块像素设置
                     } else {
-                        pixels[y * size + x] = 0xffffffff;
+                        /**
+                         * 白色色块的自定义颜色值
+                         */
+                        pixels[y * size + x] = 0xffffffff;// 白色色块像素设置
                     }
-
                 }
             }
-            Bitmap bitmap = Bitmap.createBitmap(size, size,
-                    Bitmap.Config.ARGB_8888);
+
+            Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, size, 0, 0, size, size);
             return bitmap;
         } catch (WriterException e) {
@@ -70,25 +88,25 @@ public class QRCode {
     /**
      * 生成带logo的二维码，默认二维码的大小为500，logo为二维码的1/5
      *
-     * @param text 需要生成二维码的文字、网址等
+     * @param text    需要生成二维码的文字、网址等
      * @param mBitmap logo文件
      * @return bitmap
      */
     public static Bitmap createQRCodeWithLogo(String text, Bitmap mBitmap) {
-        return createQRCodeWithLogo(text,500,mBitmap);
+        return createQRCodeWithLogo(text, 500, mBitmap);
     }
 
     /**
      * 生成带logo的二维码，logo默认为二维码的1/5
      *
-     * @param text 需要生成二维码的文字、网址等
-     * @param size 需要生成二维码的大小（）
+     * @param text    需要生成二维码的文字、网址等
+     * @param size    需要生成二维码的大小（）
      * @param mBitmap logo文件
      * @return bitmap
      */
     public static Bitmap createQRCodeWithLogo(String text, int size, Bitmap mBitmap) {
         try {
-            IMAGE_HALFWIDTH = size/10;
+            IMAGE_HALFWIDTH = size / 10;
             Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
             hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
             /*

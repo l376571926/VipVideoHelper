@@ -27,7 +27,7 @@ import group.tonight.vipvideohelper.R;
 import group.tonight.vipvideohelper.VersionUpdateBean;
 import group.tonight.vipvideohelper.VersionUpdater;
 import group.tonight.vipvideohelper.other.Consts;
-import group.tonight.vipvideohelper.other.QRCode;
+import group.tonight.vipvideohelper.other.QRCodeUtils;
 
 public class SettingActivity extends BaseBackActivity {
 
@@ -51,7 +51,7 @@ public class SettingActivity extends BaseBackActivity {
                 }
                 String mBrowser_download_url = assetsBean.getBrowser_download_url();
 
-                Bitmap bitmap = QRCode.createQRCodeWithLogo(mBrowser_download_url, 500, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+                Bitmap bitmap = QRCodeUtils.createQRCodeWithLogo(mBrowser_download_url, 500, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
                 mShareAppImageView.setImageBitmap(bitmap);
             }
         });
