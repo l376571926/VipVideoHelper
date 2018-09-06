@@ -28,8 +28,9 @@ import group.tonight.vipvideohelper.VersionUpdateBean;
 import group.tonight.vipvideohelper.VersionUpdater;
 import group.tonight.vipvideohelper.other.Consts;
 import group.tonight.vipvideohelper.other.QRCodeUtils;
+import group.tonight.vipvideohelper.worm.VipInternetWorm;
 
-public class SettingActivity extends BaseBackActivity {
+public class SettingActivity extends BaseBackActivity implements View.OnClickListener {
 
     private TextView mVersionTextView;
     private ImageView mShareAppImageView;
@@ -38,6 +39,8 @@ public class SettingActivity extends BaseBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        setTitle("设置");
 
         mVersionTextView = (TextView) findViewById(R.id.version);
         mShareAppImageView = (ImageView) findViewById(R.id.share_app);
@@ -56,9 +59,29 @@ public class SettingActivity extends BaseBackActivity {
             }
         });
 
-        mVersionTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mVersionTextView.setOnClickListener(this);
+
+        findViewById(R.id.parse).setOnClickListener(this);
+        findViewById(R.id.manage).setOnClickListener(this);
+
+        try {
+            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            mVersionTextView.setText("当前版本：" + versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.manage:
+                startActivity(new Intent(this, ApiManageActivity.class));
+                break;
+            case R.id.parse:
+                new Thread(new VipInternetWorm(this)).start();
+                break;
+            case R.id.version:
                 VersionUpdater versionUpdater = new VersionUpdater();
                 versionUpdater.observe(SettingActivity.this, new Observer<VersionUpdateBean.AssetsBean>() {
                     @Override
@@ -66,8 +89,6 @@ public class SettingActivity extends BaseBackActivity {
                         if (assetsBean == null) {
                             return;
                         }
-                        final String content_type = assetsBean.getContent_type();
-
                         final int id = assetsBean.getId();
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
                         int lastVersionId = preferences.getInt(Consts.KEY_LAST_VERSION_ID, 0);
@@ -105,14 +126,9 @@ public class SettingActivity extends BaseBackActivity {
 
                     }
                 });
-            }
-        });
-
-        try {
-            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            mVersionTextView.setText("当前版本：" + versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+                break;
+            default:
+                break;
         }
     }
 }

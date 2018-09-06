@@ -5,11 +5,13 @@ import android.arch.lifecycle.LiveData;
 import java.util.ArrayList;
 import java.util.List;
 
+import group.tonight.vipvideohelper.dao.AppRoomDatabase;
+import group.tonight.vipvideohelper.dao.VipApiUrl;
+import group.tonight.vipvideohelper.dao.VipApiUrlDao;
 import group.tonight.vipvideohelper.other.VipBaseUrlProvider;
 
 
 public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable {
-    private static final String TAG = VideoUrlLiveData.class.getSimpleName();
     private String vipVideoUrl;
 
     public VideoUrlLiveData(String vipVideoUrl) {
@@ -20,32 +22,21 @@ public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable
     @Override
     public void run() {
         VipBaseUrlProvider provider = new VipBaseUrlProvider();
-        List<String> all = provider.getAll();
-        String vipVideoUrl = provider.getTestVipVideoUrl();
-
+        List<String> allApiUrlList = provider.getAll();
         List<String> availabel = new ArrayList<>();
-        for (int i = 0; i < all.size(); i++) {
-            String videoUrl = all.get(i) + this.vipVideoUrl;
-//            Request request = new Request.Builder()
-//                    .url(videoUrl)
-//                    .build();
-//            try {
-//                Response response = App.getOkHttpClient().newCall(request).execute();
-//                int code = response.code();
-//                String message = response.message();
 
-//                if (code == 200) {//过滤非200请求
-//                    ResponseBody responseBody = response.body();
-//                    MediaType mediaType = responseBody.contentType();
-//                    long contentLength = responseBody.contentLength();
-//                    Log.e(TAG, "doInBackground: " + i + " " + code + " " + message + " " + mediaType + " " + contentLength + " " + videoUrl);
-            availabel.add(videoUrl);
-//                }
-
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                Log.d(TAG, "doInBackground: " + i + " " + videoUrl + " " + e.getMessage());
-//            }
+        VipApiUrlDao vipApiUrlDao = AppRoomDatabase.get().vipApiUrlDao();
+        for (String baseApi : allApiUrlList) {
+            VipApiUrl vipApiUrl = vipApiUrlDao.findVipApiUrlByUrl(baseApi);
+            if (vipApiUrl == null) {
+                vipApiUrl = new VipApiUrl();
+                vipApiUrl.setUrl(baseApi);
+                vipApiUrlDao.insert(vipApiUrl);
+            }
+        }
+        List<VipApiUrl> allVipApiUrls = vipApiUrlDao.getAllAvailableApiUrls();
+        for (VipApiUrl url : allVipApiUrls) {
+            availabel.add(url.getUrl() + this.vipVideoUrl);
         }
         postValue(availabel);
     }

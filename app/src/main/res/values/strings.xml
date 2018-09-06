@@ -1,7 +1,13 @@
 <resources>
-    <string name="app_name">VipVideoHelper</string>
+    <string name="app_name">付费视频助手</string>
     <string name="title_activity_home">HomeActivity</string>
 
     <string name="file_provider_authorities">group.tonight.vipvideohelper.provider</string>
     <string name="title_activity_baidu">BaiduActivity</string>
+
+    <string-array name="defaults_video_url_array">
+        <item>http://m.iqiyi.com/</item>
+        <item>http://m.v.qq.com/</item>
+        <item>https://www.youku.com</item>
+    </string-array>
 </resources>

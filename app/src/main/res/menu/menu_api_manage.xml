@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/action_test"
+        android:icon="@drawable/playlist_check"
+        android:title="测试全部接口" />
+
+
+    <item
+        android:id="@+id/action_test_1"
+        android:icon="@drawable/playlist_check"
+        android:title="测试可用接口" />
+
+    <item
+        android:id="@+id/action_test_2"
+        android:icon="@drawable/playlist_check"
+        android:title="测试不可用接口" />
+</menu>

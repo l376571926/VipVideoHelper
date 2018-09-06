@@ -54,7 +54,8 @@
         <activity
             android:name=".activities.BaiduActivity"
             android:label="@string/title_activity_baidu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.ApiManageActivity"></activity>
     </application>
 
 </manifest>

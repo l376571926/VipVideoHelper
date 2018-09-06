@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="?android:listPreferredItemHeightSmall"
+        android:orientation="horizontal"
+        android:paddingLeft="?android:listPreferredItemPaddingLeft"
+        android:paddingRight="?android:listPreferredItemPaddingRight">
+
+        <CheckBox
+            android:id="@android:id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false" />
+
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:minHeight="?android:listPreferredItemHeightSmall"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="http://jx.api.163ren.com/vod.php?url=" />
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

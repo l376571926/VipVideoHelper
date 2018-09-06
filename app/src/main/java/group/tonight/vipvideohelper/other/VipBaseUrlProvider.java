@@ -8,8 +8,6 @@ import java.util.Set;
 
 public class VipBaseUrlProvider {
     private static String TEST_VIP_VIDEO_URL = "http://www.iqiyi.com/v_19rr1num7g.html";
-    private static final String DEFAULT_API_URL = "http://yun.baiyug.cn/vip/index.php?url=";
-    private static final String DEFAULT_API_URL_2 = "http://jiexi.92fz.cn/player/vip.php?url=";
     private final Map<String, String> map;
 
     public VipBaseUrlProvider() {
@@ -70,38 +68,39 @@ public class VipBaseUrlProvider {
         map.put("http://www.vipjiexi.com/tong.php?url=", "万能接口17");
         map.put("http://jx.api.163ren.com/vod.php?url=", "万能接口19");
 
-//        map.put("http://www.82190555.com/video.php?url=", "万能接口20");
-//        map.put("http://dingdang-tv.com/jx?url=", "万能接口18");
-//        map.put("http://jx.598110.com/duo/index.php?url=", "华南线路②");
-//        map.put("http://www.vipjiexi.com/yun.php?url=", "万能接口12");
-//        map.put("https://jxapi.nepian.com/ckparse/?url=", "万能接口13");
-//        map.put("http://qtv.soshane.com/ko.php?url=", "万能接口14");
-//        map.put("http://jx.vgoodapi.com/jx.php?url=", "万能接口9");
-//        map.put("http://vip.72du.com/api/?url=", "万能接口10");
-//        map.put("http://www.efunfilm.com/yunparse/index.php?url=", "线路八");
-//        map.put("http://api.47ks.com/webcloud/?v=", "线路十");
-//        map.put("http://api.zuilingxian.com/jiexi.php?url=", "万能接口2");
-//        map.put("http://mt2t.com/yun?url=", "万能接口3");
-//        map.put("http://7cyd.com/vip/?url=", "万能接口4");
-//        map.put("http://v.72du.com/api/?url=", "万能接口5");
-//        map.put("http://jiexi.92fz.cn/player/vip.php?url=", "线路四");
-//        map.put("https://ckplaer.duapp.com/hai.php?url=", "万能接口20");
-//        map.put("https://apiv.ga/magnet/", "万能接口22");
-//        map.put("http://player.jidiaose.com/supapi/iframe.php?v=", "万能接口26");
-//        map.put("https://api.47ks.com/webcloud/?v=", "万能接口27");
-//        map.put("http://www.xnflv.com/xnflv/index.php?url=", "万能接口24");
-//        map.put("http://88wx.pw/duo.php?url=", "请选择接口");
-//        map.put("http://tv.x-99.cn/api/wnapi.php?id=", "15号vip解析接口【小七科技】");
-//        map.put("http://www.85105052.com/admin.php?url=", "11号vip解析接口【小七科技】");
-//        map.put("http://api.fastflv.cc/jiexi/?url=", "8号vip解析接口【小七科技】");
-//        map.put("http://www.662820.com/xnflv/index.php?url=", "7号vip解析接口【小七科技】");
-//        map.put("http://api.123zx.net/m3u8/play.html?id=", "2号vip解析接口【小七科技】");
-//        map.put("http://api.baiyug.cn/vip/index.php?url=", "爱奇艺超清接口2");//http://yun.baiyug.cn/
-//        map.put("https://api.flvsp.com/?url=", "爱奇艺超清接口3");
-//        map.put("http://api.xfsub.com/index.php?url=", "芒果TV超清接口");//http://api.xfsub.com/
-//        map.put("http://65yw.2m.vc/chaojikan.php?url=", "芒果TV手机接口");
-//        map.put("http://www.82190555.com/index/qqvod.php?url=", "优酷超清接口");
-//        map.put("http://jqaaa.com/jq3/?url=", "万能接口4");
+        //以下为测试不可用接口
+        map.put("http://www.82190555.com/video.php?url=", "万能接口20");
+        map.put("http://dingdang-tv.com/jx?url=", "万能接口18");
+        map.put("http://jx.598110.com/duo/index.php?url=", "华南线路②");
+        map.put("http://www.vipjiexi.com/yun.php?url=", "万能接口12");
+        map.put("https://jxapi.nepian.com/ckparse/?url=", "万能接口13");
+        map.put("http://qtv.soshane.com/ko.php?url=", "万能接口14");
+        map.put("http://jx.vgoodapi.com/jx.php?url=", "万能接口9");
+        map.put("http://vip.72du.com/api/?url=", "万能接口10");
+        map.put("http://www.efunfilm.com/yunparse/index.php?url=", "线路八");
+        map.put("http://api.47ks.com/webcloud/?v=", "线路十");
+        map.put("http://api.zuilingxian.com/jiexi.php?url=", "万能接口2");
+        map.put("http://mt2t.com/yun?url=", "万能接口3");
+        map.put("http://7cyd.com/vip/?url=", "万能接口4");
+        map.put("http://v.72du.com/api/?url=", "万能接口5");
+        map.put("http://jiexi.92fz.cn/player/vip.php?url=", "线路四");
+        map.put("https://ckplaer.duapp.com/hai.php?url=", "万能接口20");
+        map.put("https://apiv.ga/magnet/", "万能接口22");
+        map.put("http://player.jidiaose.com/supapi/iframe.php?v=", "万能接口26");
+        map.put("https://api.47ks.com/webcloud/?v=", "万能接口27");
+        map.put("http://www.xnflv.com/xnflv/index.php?url=", "万能接口24");
+        map.put("http://88wx.pw/duo.php?url=", "请选择接口");
+        map.put("http://tv.x-99.cn/api/wnapi.php?id=", "15号vip解析接口【小七科技】");
+        map.put("http://www.85105052.com/admin.php?url=", "11号vip解析接口【小七科技】");
+        map.put("http://api.fastflv.cc/jiexi/?url=", "8号vip解析接口【小七科技】");
+        map.put("http://www.662820.com/xnflv/index.php?url=", "7号vip解析接口【小七科技】");
+        map.put("http://api.123zx.net/m3u8/play.html?id=", "2号vip解析接口【小七科技】");
+        map.put("http://api.baiyug.cn/vip/index.php?url=", "爱奇艺超清接口2");//http://yun.baiyug.cn/
+        map.put("https://api.flvsp.com/?url=", "爱奇艺超清接口3");
+        map.put("http://api.xfsub.com/index.php?url=", "芒果TV超清接口");//http://api.xfsub.com/
+        map.put("http://65yw.2m.vc/chaojikan.php?url=", "芒果TV手机接口");
+        map.put("http://www.82190555.com/index/qqvod.php?url=", "优酷超清接口");
+        map.put("http://jqaaa.com/jq3/?url=", "万能接口4");
     }
 
     public List<String> getAll() {
