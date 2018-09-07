@@ -22,6 +22,8 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+        //https://stackoverflow.com/questions/41226382/using-vector-drawable-compat
+        vectorDrawables.useSupportLibrary = true // This line here
     }
     buildTypes {
         release {

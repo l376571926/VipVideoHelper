@@ -42,15 +42,32 @@
         android:layout_height="1dp"
         android:background="?android:listDivider" />
 
-    <TextView
-        android:id="@+id/version"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:listPreferredItemHeightSmall"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingLeft="?android:listPreferredItemPaddingLeft"
-        android:paddingRight="?android:listPreferredItemPaddingRight"
-        android:text="当前版本：1.0" />
+        android:paddingRight="?android:listPreferredItemPaddingRight">
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="0dp"
+            android:layout_height="?android:listPreferredItemHeightSmall"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="当前版本：1.0" />
+
+        <ImageView
+            android:id="@+id/new_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/circle_medium"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+
 
     <TextView
         android:layout_width="match_parent"

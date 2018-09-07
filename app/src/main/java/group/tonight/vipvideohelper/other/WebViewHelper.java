@@ -2,11 +2,19 @@ package group.tonight.vipvideohelper.other;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -22,6 +30,7 @@ import com.socks.library.KLog;
 import java.io.IOException;
 
 import group.tonight.vipvideohelper.App;
+import group.tonight.vipvideohelper.R;
 import group.tonight.vipvideohelper.dao.AppRoomDatabase;
 import group.tonight.vipvideohelper.dao.VipApiUrl;
 import group.tonight.vipvideohelper.dao.VipApiUrlDao;
@@ -33,10 +42,14 @@ public class WebViewHelper {
     private final ProgressDialog mProgressDialog;
     private IWebViewClient mIWebViewClient;
     private String mCurrentApiUrl;
+    private Context mContext;
+    private final ViewGroup mVideoContainer;
 
     public WebViewHelper(WebView webView) {
         this.mWebView = webView;
-        mProgressDialog = new ProgressDialog(webView.getContext());
+        mContext = webView.getContext();
+        mProgressDialog = new ProgressDialog(mContext);
+        mVideoContainer = webView.getRootView().findViewById(R.id.video_container);
     }
 
     /**
@@ -60,9 +73,47 @@ public class WebViewHelper {
 
         mWebView.requestFocus();
         mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.setWebChromeClient(mWebChromeClient);
         mWebView.setWebViewClient(mWebViewClient);
     }
+
+    private WebChromeClient mWebChromeClient = new WebChromeClient() {
+        @Override
+        public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
+            super.onShowCustomView(view, requestedOrientation, callback);
+            KLog.e();
+        }
+
+        /**
+         * 在视频中点击全屏按钮时调用这个方法
+         * @param view
+         * @param callback
+         */
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+            super.onShowCustomView(view, callback);
+            KLog.e();
+            fullScreen(mContext, true);
+            if (mVideoContainer != null) {
+                mVideoContainer.removeAllViews();
+                mVideoContainer.addView(view);
+            }
+        }
+
+
+        /**
+         * 退出全屏视频模式时会调用这个方法
+         */
+        @Override
+        public void onHideCustomView() {
+            super.onHideCustomView();
+            KLog.e();
+            fullScreen(mContext, true);
+            if (mVideoContainer != null) {
+                mVideoContainer.removeAllViews();
+            }
+        }
+    };
 
     public void setIWebViewClient(IWebViewClient iWebViewClient) {
         this.mIWebViewClient = iWebViewClient;
@@ -179,5 +230,44 @@ public class WebViewHelper {
 
     public interface IWebViewClient {
         void onPageFinished(WebView view, String url);
+    }
+
+    public static void fullScreen(Context context, boolean adjustOrientation) {
+        if (context instanceof AppCompatActivity) {
+            AppCompatActivity activity = (AppCompatActivity) context;
+            Configuration configuration = activity.getResources().getConfiguration();
+            int orientation = configuration.orientation;
+
+            boolean fullScreen = orientation != Configuration.ORIENTATION_PORTRAIT;
+            if (adjustOrientation) {
+                if (orientation != Configuration.ORIENTATION_PORTRAIT) {
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    fullScreen = false;
+                } else {
+                    fullScreen = true;
+                    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+            }
+            ActionBar supportActionBar = activity.getSupportActionBar();
+            if (supportActionBar != null) {
+                if (fullScreen) {
+                    supportActionBar.hide();
+                } else {
+                    supportActionBar.show();
+                }
+            }
+            Window activityWindow = activity.getWindow();
+
+            WindowManager.LayoutParams attrs = activityWindow.getAttributes();
+            if (fullScreen) {
+                attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                activityWindow.setAttributes(attrs);
+                activityWindow.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            } else {
+                attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                activityWindow.setAttributes(attrs);
+                activityWindow.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            }
+        }
     }
 }

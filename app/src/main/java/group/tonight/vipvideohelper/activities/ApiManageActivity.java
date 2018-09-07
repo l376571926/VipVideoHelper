@@ -37,11 +37,14 @@ public class ApiManageActivity extends BaseBackActivity implements BaseQuickAdap
     private ProgressBar mProgressBar;
 
     @Override
+    protected int setActivityTitle() {
+        return R.string.api_list_manage;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_api_manage);
-
-        setTitle("接口管理");
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);

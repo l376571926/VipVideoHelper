@@ -29,16 +29,21 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
 
     private ImageView mShareAppImageView;
     private VersionUpdateBean mVersionUpdateBean;
+    private View mNewVersionView;
+
+    @Override
+    protected int setActivityTitle() {
+        return R.string.setting;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        setTitle("设置");
-
         TextView versionTextView = (TextView) findViewById(R.id.version);
         mShareAppImageView = (ImageView) findViewById(R.id.share_app);
+        mNewVersionView = findViewById(R.id.new_version);
 
         VersionUpdateTask versionUpdateTask = new VersionUpdateTask();
         versionUpdateTask.observe(this, new Observer<VersionUpdateBean>() {
@@ -61,6 +66,7 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
                 if (PrefUtils.get().getInt(Consts.KEY_LAST_VERSION_ID, 0) < assetsBean.getId()) {
                     //发现新版本
                     mVersionUpdateBean = versionUpdateBean;
+                    mNewVersionView.setVisibility(View.VISIBLE);
                 }
             }
         });

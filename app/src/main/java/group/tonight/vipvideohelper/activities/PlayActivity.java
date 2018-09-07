@@ -7,11 +7,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.webkit.WebView;
 
 import com.socks.library.KLog;
@@ -20,16 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group.tonight.vipvideohelper.R;
-import group.tonight.vipvideohelper.other.VideoUrlLiveData;
 import group.tonight.vipvideohelper.dao.AppRoomDatabase;
 import group.tonight.vipvideohelper.dao.VipApiUrl;
 import group.tonight.vipvideohelper.other.PrefUtils;
+import group.tonight.vipvideohelper.other.VideoUrlLiveData;
 import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class PlayActivity extends BaseBackActivity {
     private WebView mWebView;
     private List<String> mVideoUrlList = new ArrayList<>();
     private String mCurrentVideoUrl;
+
+    @Override
+    protected int setActivityTitle() {
+        return 0;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,24 +151,7 @@ public class PlayActivity extends BaseBackActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         KLog.e("onConfigurationChanged: " + newConfig.orientation);
-        boolean fullScreen = newConfig.orientation != Configuration.ORIENTATION_PORTRAIT;
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            if (fullScreen) {
-                supportActionBar.hide();
-            } else {
-                supportActionBar.show();
-            }
-        }
-        WindowManager.LayoutParams attrs = getWindow().getAttributes();
-        if (fullScreen) {
-            attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-            getWindow().setAttributes(attrs);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        } else {
-            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().setAttributes(attrs);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
+
+        WebViewHelper.fullScreen(this, false);
     }
 }

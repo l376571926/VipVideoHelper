@@ -11,6 +11,11 @@ import group.tonight.vipvideohelper.R;
 public class BaiduActivity extends BaseBackActivity {
 
     @Override
+    protected int setActivityTitle() {
+        return 0;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_baidu);

@@ -1,12 +1,8 @@
 package group.tonight.vipvideohelper.activities;
 
-import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,14 +19,7 @@ import android.widget.TextView;
 
 import com.socks.library.KLog;
 
-import java.util.List;
-
 import group.tonight.vipvideohelper.R;
-import group.tonight.vipvideohelper.model.VersionUpdateBean;
-import group.tonight.vipvideohelper.other.VersionUpdateTask;
-import group.tonight.vipvideohelper.other.Consts;
-import group.tonight.vipvideohelper.other.PrefUtils;
-import group.tonight.vipvideohelper.other.UpdateDialogHelper;
 import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class HomeActivity extends AppCompatActivity {
@@ -38,7 +27,6 @@ public class HomeActivity extends AppCompatActivity {
     private WebView mWebView;
     private String mCurrentVideoUrl;
     private EditText mWebUrlTextView;
-    private SharedPreferences mPreferences;
     private String[] mVideoUrlArrays;
 
     @Override
@@ -88,35 +76,6 @@ public class HomeActivity extends AppCompatActivity {
         });
         mVideoUrlArrays = getResources().getStringArray(R.array.defaults_video_url_array);
         mWebView.loadUrl(mVideoUrlArrays[0]);
-
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        VersionUpdateTask versionUpdateTask = new VersionUpdateTask();
-        versionUpdateTask.observe(this, new Observer<VersionUpdateBean>() {
-            @Override
-            public void onChanged(@Nullable VersionUpdateBean versionUpdateBean) {
-                if (versionUpdateBean == null) {
-                    return;
-                }
-                String body = versionUpdateBean.getBody();
-                List<VersionUpdateBean.AssetsBean> assetsBeanList = versionUpdateBean.getAssets();
-                if (assetsBeanList == null) {
-                    return;
-                }
-                if (assetsBeanList.isEmpty()) {
-                    return;
-                }
-                final VersionUpdateBean.AssetsBean assetsBean = assetsBeanList.get(0);
-                if (assetsBean == null) {
-                    return;
-                }
-                int id = assetsBean.getId();
-                int lastVersionId = PrefUtils.get().getInt(Consts.KEY_LAST_VERSION_ID, 0);
-                if (lastVersionId < id) {
-                    new UpdateDialogHelper(HomeActivity.this, versionUpdateBean).show();
-                }
-            }
-        });
     }
 
     @Override
