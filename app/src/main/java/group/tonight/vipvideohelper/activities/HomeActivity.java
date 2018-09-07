@@ -2,6 +2,7 @@ package group.tonight.vipvideohelper.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,8 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.socks.library.KLog;
 
 import group.tonight.vipvideohelper.R;
@@ -38,6 +41,12 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(this)
+                .icon(MaterialDesignIconic.Icon.gmi_airplane)
+                .color(Color.WHITE);
+        fab.setImageDrawable(iconicsDrawable);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
