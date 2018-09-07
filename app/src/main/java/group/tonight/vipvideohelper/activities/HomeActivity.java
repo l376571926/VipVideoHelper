@@ -22,17 +22,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
-import com.yanzhenjie.permission.Action;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.Permission;
 
 import java.util.List;
 
-import group.tonight.vipvideohelper.DownLoadService;
 import group.tonight.vipvideohelper.R;
-import group.tonight.vipvideohelper.VersionUpdateBean;
-import group.tonight.vipvideohelper.VersionUpdater;
+import group.tonight.vipvideohelper.model.VersionUpdateBean;
+import group.tonight.vipvideohelper.other.VersionUpdateTask;
 import group.tonight.vipvideohelper.other.Consts;
+import group.tonight.vipvideohelper.other.PrefUtils;
+import group.tonight.vipvideohelper.other.UpdateDialogHelper;
 import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class HomeActivity extends AppCompatActivity {
@@ -93,43 +91,29 @@ public class HomeActivity extends AppCompatActivity {
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        VersionUpdater versionUpdater = new VersionUpdater();
-        versionUpdater.observe(this, new Observer<VersionUpdateBean.AssetsBean>() {
+        VersionUpdateTask versionUpdateTask = new VersionUpdateTask();
+        versionUpdateTask.observe(this, new Observer<VersionUpdateBean>() {
             @Override
-            public void onChanged(@Nullable final VersionUpdateBean.AssetsBean assetsBean) {
+            public void onChanged(@Nullable VersionUpdateBean versionUpdateBean) {
+                if (versionUpdateBean == null) {
+                    return;
+                }
+                String body = versionUpdateBean.getBody();
+                List<VersionUpdateBean.AssetsBean> assetsBeanList = versionUpdateBean.getAssets();
+                if (assetsBeanList == null) {
+                    return;
+                }
+                if (assetsBeanList.isEmpty()) {
+                    return;
+                }
+                final VersionUpdateBean.AssetsBean assetsBean = assetsBeanList.get(0);
                 if (assetsBean == null) {
                     return;
                 }
-                final int id = assetsBean.getId();
-                int lastVersionId = mPreferences.getInt(Consts.KEY_LAST_VERSION_ID, 0);
+                int id = assetsBean.getId();
+                int lastVersionId = PrefUtils.get().getInt(Consts.KEY_LAST_VERSION_ID, 0);
                 if (lastVersionId < id) {
-                    new AlertDialog.Builder(HomeActivity.this)
-                            .setMessage("发现新版本，是否马上更新？")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    AndPermission.with(HomeActivity.this)
-                                            .runtime()
-                                            .permission(Permission.Group.STORAGE)
-                                            .onGranted(new Action<List<String>>() {
-                                                @Override
-                                                public void onAction(List<String> data) {
-                                                    Intent service = new Intent(HomeActivity.this, DownLoadService.class);
-                                                    service.putExtra(DownLoadService.EXTRA_DATA, assetsBean);
-                                                    startService(service);
-                                                }
-                                            })
-                                            .start();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
-                            .show();
-
+                    new UpdateDialogHelper(HomeActivity.this, versionUpdateBean).show();
                 }
             }
         });

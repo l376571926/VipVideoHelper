@@ -1,24 +1,25 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.other;
 
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
 import com.google.gson.Gson;
+import com.socks.library.KLog;
 
 import java.io.IOException;
 import java.util.List;
 
+import group.tonight.vipvideohelper.App;
+import group.tonight.vipvideohelper.model.VersionUpdateBean;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class VersionUpdater extends LiveData<VersionUpdateBean.AssetsBean> implements Runnable {
+public class VersionUpdateTask extends LiveData<VersionUpdateBean> implements Runnable {
     //获取所有发布的版本
     private static final String ALL = "https://api.github.com/repos/l376571926/VipVideoHelper/releases";
     //最新版apk地址
-    private static final String LATEST = "https://api.github.com/repos/l376571926/VipVideoHelper/releases/latest";
-    private static final String TAG = VersionUpdater.class.getSimpleName();
+    public static final String LATEST = "https://api.github.com/repos/l376571926/VipVideoHelper/releases/latest";
 
-    public VersionUpdater() {
+    public VersionUpdateTask() {
         new Thread(this).start();
     }
 
@@ -39,6 +40,8 @@ public class VersionUpdater extends LiveData<VersionUpdateBean.AssetsBean> imple
             if (versionUpdateBean == null) {
                 return;
             }
+            postValue(versionUpdateBean);
+
             List<VersionUpdateBean.AssetsBean> assetsBeanList = versionUpdateBean.getAssets();
             if (assetsBeanList == null) {
                 return;
@@ -52,10 +55,10 @@ public class VersionUpdater extends LiveData<VersionUpdateBean.AssetsBean> imple
             int download_count = assetsBean.getDownload_count();
             String content_type = assetsBean.getContent_type();
 
-            postValue(assetsBean);
+//            postValue(assetsBean);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG, "run: " + e.getMessage());
+            KLog.e("run: " + e.getMessage());
         }
     }
 }

@@ -64,6 +64,10 @@ public class ApiManageActivity extends BaseBackActivity implements BaseQuickAdap
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_test:
+                if (mProgressBar.getVisibility() == View.VISIBLE) {
+                    Toast.makeText(this, "接口正在测试中，请稍后再试", Toast.LENGTH_SHORT).show();
+                    return super.onOptionsItemSelected(item);
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -72,6 +76,10 @@ public class ApiManageActivity extends BaseBackActivity implements BaseQuickAdap
                 }).start();
                 break;
             case R.id.action_test_1:
+                if (mProgressBar.getVisibility() == View.VISIBLE) {
+                    Toast.makeText(this, "接口正在测试中，请稍后再试", Toast.LENGTH_SHORT).show();
+                    return super.onOptionsItemSelected(item);
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -80,6 +88,10 @@ public class ApiManageActivity extends BaseBackActivity implements BaseQuickAdap
                 }).start();
                 break;
             case R.id.action_test_2:
+                if (mProgressBar.getVisibility() == View.VISIBLE) {
+                    Toast.makeText(this, "接口正在测试中，请稍后再试", Toast.LENGTH_SHORT).show();
+                    return super.onOptionsItemSelected(item);
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -159,11 +171,7 @@ public class ApiManageActivity extends BaseBackActivity implements BaseQuickAdap
                                     }
                                 }
                         );
-
-
             }
         }).start();
     }
-
-
 }

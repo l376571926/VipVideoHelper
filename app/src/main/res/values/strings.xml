@@ -4,6 +4,7 @@
 
     <string name="file_provider_authorities">group.tonight.vipvideohelper.provider</string>
     <string name="title_activity_baidu">BaiduActivity</string>
+    <string name="current_version_name_place_holder">当前版本：%1$s</string>
 
     <string-array name="defaults_video_url_array">
         <item>http://m.iqiyi.com/</item>

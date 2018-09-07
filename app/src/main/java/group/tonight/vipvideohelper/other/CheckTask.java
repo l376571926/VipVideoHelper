@@ -1,5 +1,9 @@
 package group.tonight.vipvideohelper.other;
 
+import android.arch.lifecycle.GenericLifecycleObserver;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -17,9 +21,12 @@ import group.tonight.vipvideohelper.dao.VipApiUrlDao;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class CheckTask extends AsyncTask<Void, Integer, Void> {
+public class CheckTask extends AsyncTask<Void, Integer, Void> implements GenericLifecycleObserver {
     private List<VipApiUrl> vipApiUrlList;
     private WeakReference<ProgressBar> mProgressBarRef;
+    private Lifecycle mLifecycle;
+    private boolean mIsActivityDestroy;
+
 
     public CheckTask(List<VipApiUrl> vipApiUrlList, ProgressBar progressBar) {
         this.vipApiUrlList = vipApiUrlList;
@@ -27,6 +34,11 @@ public class CheckTask extends AsyncTask<Void, Integer, Void> {
         ProgressBar bar = mProgressBarRef.get();
         if (bar != null) {
             bar.setMax(this.vipApiUrlList.size());
+        }
+        Context context = progressBar.getContext();
+        if (context instanceof LifecycleOwner) {
+            mLifecycle = ((LifecycleOwner) context).getLifecycle();
+            mLifecycle.addObserver(this);
         }
     }
 
@@ -50,6 +62,10 @@ public class CheckTask extends AsyncTask<Void, Integer, Void> {
     protected Void doInBackground(Void... voids) {
         VipApiUrlDao vipApiUrlDao = AppRoomDatabase.get().vipApiUrlDao();
         for (int i = 0; i < vipApiUrlList.size(); i++) {
+            if (mIsActivityDestroy) {
+                KLog.e("Activity已经销毁，提前结束线程");
+                break;
+            }
             publishProgress(i + 1);
             VipApiUrl vipApiUrl = vipApiUrlList.get(i);
             String url = vipApiUrl.getUrl();
@@ -81,5 +97,18 @@ public class CheckTask extends AsyncTask<Void, Integer, Void> {
             vipApiUrlDao.update(vipApiUrl);
         }
         return null;
+    }
+
+    @Override
+    public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) {
+        Lifecycle.State currentState = source.getLifecycle().getCurrentState();
+        if (currentState == Lifecycle.State.DESTROYED) {
+//            KLog.e("Activity已销毁");
+            mIsActivityDestroy = true;
+            if (mLifecycle != null) {
+                mLifecycle.removeObserver(this);
+            }
+        }
+//        KLog.e(currentState + " " + event.name());
     }
 }

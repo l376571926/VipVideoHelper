@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".GlobalBroadcastReceiver">
+        <receiver android:name=".receivers.GlobalBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
                 <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
@@ -48,7 +48,7 @@
                 android:resource="@xml/permission_file_paths" />
         </provider>
 
-        <service android:name=".DownLoadService" />
+        <service android:name=".services.DownLoadService" />
 
         <activity android:name=".activities.SettingActivity" />
         <activity

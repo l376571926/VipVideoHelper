@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.model;
 
 import java.io.Serializable;
 import java.util.List;

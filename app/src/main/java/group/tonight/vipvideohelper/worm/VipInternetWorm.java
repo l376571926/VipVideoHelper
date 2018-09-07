@@ -1,6 +1,8 @@
 package group.tonight.vipvideohelper.worm;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Looper;
 import android.webkit.URLUtil;
 import android.widget.Toast;
@@ -24,19 +26,26 @@ import group.tonight.vipvideohelper.dao.VipApiUrlDao;
 /**
  * 采集站：如有乐享
  */
-public class VipInternetWorm implements Runnable {
+public class VipInternetWorm extends AsyncTask<Void, Void, Void> {
     //采集站：如有乐享
     private static final String URL_1 = "https://51.ruyo.net/3127.html";
     //采集站：岩兔站
     private static final String URL_2 = "https://yantuz.cn/466.html";
-    private final Context mContext;
+
+    private ProgressDialog mProgressDialog;
 
     public VipInternetWorm(Context context) {
-        mContext = context.getApplicationContext();
+        mProgressDialog = new ProgressDialog(context);
     }
 
     @Override
-    public void run() {
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mProgressDialog.show();
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
         Connection connection = Jsoup.connect(URL_1);
         try {
             Document document = connection.get();
@@ -85,8 +94,15 @@ public class VipInternetWorm implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
             Looper.prepare();
-            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mProgressDialog.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             Looper.loop();
         }
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        mProgressDialog.dismiss();
     }
 }

@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.other;
 
 import android.arch.lifecycle.LiveData;
 
@@ -8,7 +8,6 @@ import java.util.List;
 import group.tonight.vipvideohelper.dao.AppRoomDatabase;
 import group.tonight.vipvideohelper.dao.VipApiUrl;
 import group.tonight.vipvideohelper.dao.VipApiUrlDao;
-import group.tonight.vipvideohelper.other.VipBaseUrlProvider;
 
 
 public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable {

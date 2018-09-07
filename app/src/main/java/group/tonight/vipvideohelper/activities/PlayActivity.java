@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group.tonight.vipvideohelper.R;
-import group.tonight.vipvideohelper.VideoUrlLiveData;
+import group.tonight.vipvideohelper.other.VideoUrlLiveData;
 import group.tonight.vipvideohelper.dao.AppRoomDatabase;
 import group.tonight.vipvideohelper.dao.VipApiUrl;
 import group.tonight.vipvideohelper.other.PrefUtils;

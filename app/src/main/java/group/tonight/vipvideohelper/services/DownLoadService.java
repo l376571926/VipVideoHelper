@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.services;
 
 import android.app.DownloadManager;
 import android.app.Service;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import group.tonight.vipvideohelper.R;
+import group.tonight.vipvideohelper.model.VersionUpdateBean;
 import group.tonight.vipvideohelper.other.Consts;
 
 /**

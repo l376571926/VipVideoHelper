@@ -1,4 +1,4 @@
-package group.tonight.vipvideohelper;
+package group.tonight.vipvideohelper.receivers;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;

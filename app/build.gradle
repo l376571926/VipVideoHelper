@@ -66,8 +66,8 @@ dependencies {
     //    implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1325_43613_sharewithdownload_withoutGame_obfs_20180807_151115.jar')
 
     //本地存储调试工具：数据库、偏好文件
-    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
-    debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     //RecyclerView辅助工具库
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.38'
     implementation 'com.android.support:cardview-v7:27.1.1'
