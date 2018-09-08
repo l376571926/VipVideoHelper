@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class PrefUtils {
-    public static final String KEY_LAST_SELECT_API_INDEX = "last_parse_index";
+    public static final String KEY_LAST_SELECT_API_URL = "last_select_api_url";
     private static SharedPreferences INSTANCE;
 
     public static SharedPreferences init(Context context) {

@@ -12,10 +12,15 @@ import group.tonight.vipvideohelper.dao.VipApiUrlDao;
 
 public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable {
     private String vipVideoUrl;
+    private boolean onlyApiUrl;
 
     public VideoUrlLiveData(String vipVideoUrl) {
         this.vipVideoUrl = vipVideoUrl;
         new Thread(this).start();
+    }
+
+    public void setOnlyApiUrl(boolean onlyApiUrl) {
+        this.onlyApiUrl = onlyApiUrl;
     }
 
     @Override
@@ -35,7 +40,11 @@ public class VideoUrlLiveData extends LiveData<List<String>> implements Runnable
         }
         List<VipApiUrl> allVipApiUrls = vipApiUrlDao.getAllAvailableApiUrls();
         for (VipApiUrl url : allVipApiUrls) {
-            availabel.add(url.getUrl() + this.vipVideoUrl);
+            if (onlyApiUrl) {
+                availabel.add(url.getUrl());
+            } else {
+                availabel.add(url.getUrl() + this.vipVideoUrl);
+            }
         }
         postValue(availabel);
     }

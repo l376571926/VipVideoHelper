@@ -2,8 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_select"
-        android:icon="@drawable/playlist_edit"
-        android:title="切换"
+        android:id="@+id/action_recommend"
+        android:icon="@drawable/priority_high"
+        android:title="优质播放源"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_normal"
+        android:icon="@drawable/priority_low"
+        android:title="普通播放源"
         app:showAsAction="ifRoom" />
 </menu>

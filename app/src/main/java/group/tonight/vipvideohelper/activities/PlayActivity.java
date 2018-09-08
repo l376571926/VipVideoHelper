@@ -3,7 +3,6 @@ package group.tonight.vipvideohelper.activities;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +21,7 @@ import group.tonight.vipvideohelper.dao.AppRoomDatabase;
 import group.tonight.vipvideohelper.dao.VipApiUrl;
 import group.tonight.vipvideohelper.other.PrefUtils;
 import group.tonight.vipvideohelper.other.VideoUrlLiveData;
+import group.tonight.vipvideohelper.other.VipBaseUrlProvider;
 import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class PlayActivity extends BaseBackActivity {
@@ -46,6 +46,7 @@ public class PlayActivity extends BaseBackActivity {
         if (getIntent().hasExtra("videoUrl")) {
             mCurrentVideoUrl = getIntent().getStringExtra("videoUrl");
             VideoUrlLiveData videoUrlLiveData = new VideoUrlLiveData(mCurrentVideoUrl);
+            videoUrlLiveData.setOnlyApiUrl(true);
             videoUrlLiveData.observe(this, new Observer<List<String>>() {
                 @Override
                 public void onChanged(@Nullable List<String> stringList) {
@@ -53,17 +54,11 @@ public class PlayActivity extends BaseBackActivity {
                         return;
                     }
                     mVideoUrlList = stringList;
-
-                    SharedPreferences preferences = PrefUtils.get();
-                    int index = preferences.getInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, 0);
-                    if (index >= mVideoUrlList.size()) {
-                        index = 0;
-                        preferences
-                                .edit()
-                                .putInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, 0)
-                                .apply();
+                    int urlIndex = mVideoUrlList.indexOf(PrefUtils.get().getString(PrefUtils.KEY_LAST_SELECT_API_URL, ""));
+                    if (urlIndex == -1) {
+                        urlIndex = 0;
                     }
-                    mWebView.loadUrl(mVideoUrlList.get(index));
+                    mWebView.loadUrl(mVideoUrlList.get(urlIndex) + mCurrentVideoUrl);
                 }
             });
         }
@@ -85,31 +80,54 @@ public class PlayActivity extends BaseBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_select) {
+        String lastParseApiUrl = PrefUtils.get().getString(PrefUtils.KEY_LAST_SELECT_API_URL, "");
+        if (item.getItemId() == R.id.action_recommend) {
+            final List<String> urlList = new ArrayList<>();
+            urlList.add(VipBaseUrlProvider.DEFAULT_VIP_URL_0);
+            urlList.add(VipBaseUrlProvider.DEFAULT_VIP_URL_1);
+            urlList.add(VipBaseUrlProvider.DEFAULT_VIP_URL_5);
+            urlList.add(VipBaseUrlProvider.DEFAULT_VIP_URL_2);//有广告
+            urlList.add(VipBaseUrlProvider.DEFAULT_VIP_URL_3);//有广告
+            urlList.add(VipBaseUrlProvider.DEFAULT_VIP_URL_4);//有广告
+
+            int index = urlList.indexOf(lastParseApiUrl);
+            if (index == -1) {
+                index = 0;
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle("优质播放源")
+                    .setSingleChoiceItems(urlList.toArray(new String[urlList.size()]), index, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                            String apiUrl = urlList.get(which);
+                            mWebView.loadUrl(apiUrl + mCurrentVideoUrl);
+                            PrefUtils.get()
+                                    .edit()
+                                    .putString(PrefUtils.KEY_LAST_SELECT_API_URL, apiUrl)
+                                    .apply();
+                        }
+                    })
+                    .show();
+
+        } else if (item.getItemId() == R.id.action_normal) {
             if (mVideoUrlList != null) {
                 if (!mVideoUrlList.isEmpty()) {
-                    String[] urlArray = mVideoUrlList.toArray(new String[mVideoUrlList.size()]);
-                    int index = PrefUtils.get().getInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, 0);
-                    if (index >= urlArray.length) {
+                    int index = mVideoUrlList.indexOf(lastParseApiUrl);
+                    if (index == -1) {
                         index = 0;
                     }
                     new AlertDialog.Builder(PlayActivity.this)
-                            .setSingleChoiceItems(urlArray, index, new DialogInterface.OnClickListener() {
+                            .setTitle("普通播放源")
+                            .setSingleChoiceItems(mVideoUrlList.toArray(new String[mVideoUrlList.size()]), index, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    String url = mVideoUrlList.get(i);
-                                    if (url.contains("http") && url.contains("=")) {
-                                        int start = url.indexOf("http");
-                                        int end = url.indexOf("=") + 1;
-                                        String baseUrl = url.substring(start, end);
-                                        KLog.e(baseUrl);
-                                    }
-
                                     dialogInterface.dismiss();
-                                    mWebView.loadUrl(url);
+                                    mWebView.loadUrl(mVideoUrlList.get(i) + mCurrentVideoUrl);
                                     PrefUtils.get()
                                             .edit()
-                                            .putInt(PrefUtils.KEY_LAST_SELECT_API_INDEX, i)
+                                            .putString(PrefUtils.KEY_LAST_SELECT_API_URL,mVideoUrlList.get(i))
                                             .apply();
                                 }
                             })

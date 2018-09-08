@@ -194,13 +194,13 @@ public class WebViewHelper {
                                         )
                                         .execute();
                                 if (response.code() == 200) {
-                                    KLog.e("解析接口有效，视频链接无法用于此接口");
-                                    mWebView.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(view.getContext().getApplicationContext(), "解析接口有效，视频链接无法用于此接口", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+//                                    KLog.e("解析接口有效，视频链接无法用于此接口");
+//                                    mWebView.post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            Toast.makeText(view.getContext().getApplicationContext(), "解析接口有效，视频链接无法用于此接口", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
                                     return;
                                 }
                             } catch (IOException e) {
