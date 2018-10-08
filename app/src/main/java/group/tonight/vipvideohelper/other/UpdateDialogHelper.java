@@ -23,10 +23,21 @@ public class UpdateDialogHelper {
         mVersionUpdateBean = versionUpdateBean;
     }
 
-    public void show(){
+    public void show() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("版本号：")
+                .append(mVersionUpdateBean.getTag_name())
+                .append("\n")
+                .append("发布时间：")
+                .append(mVersionUpdateBean.getPublished_at())
+                .append("\n")
+                .append("更新内容：")
+                .append("\n")
+                .append(mVersionUpdateBean.getBody());
         new AlertDialog.Builder(mContext)
                 .setTitle("更新新版本")
-                .setMessage(mVersionUpdateBean.getBody())
+//                .setMessage(mVersionUpdateBean.getBody())
+                .setMessage(builder.toString())
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

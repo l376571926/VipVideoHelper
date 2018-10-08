@@ -1,9 +1,14 @@
 package group.tonight.vipvideohelper.activities;
 
+import android.arch.lifecycle.Observer;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +27,15 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.socks.library.KLog;
 
+import java.util.List;
+
 import group.tonight.vipvideohelper.R;
+import group.tonight.vipvideohelper.model.VersionUpdateBean;
+import group.tonight.vipvideohelper.other.Consts;
+import group.tonight.vipvideohelper.other.PrefUtils;
+import group.tonight.vipvideohelper.other.QRCodeUtils;
+import group.tonight.vipvideohelper.other.UpdateDialogHelper;
+import group.tonight.vipvideohelper.other.VersionUpdateTask;
 import group.tonight.vipvideohelper.other.WebViewHelper;
 
 public class HomeActivity extends AppCompatActivity {
@@ -85,6 +98,28 @@ public class HomeActivity extends AppCompatActivity {
         });
         mVideoUrlArrays = getResources().getStringArray(R.array.defaults_video_url_array);
         mWebView.loadUrl(mVideoUrlArrays[0]);
+
+        VersionUpdateTask versionUpdateTask = new VersionUpdateTask();
+        versionUpdateTask.observe(this, new Observer<VersionUpdateBean>() {
+            @Override
+            public void onChanged(@Nullable VersionUpdateBean versionUpdateBean) {
+                if (versionUpdateBean == null) {
+                    return;
+                }
+                String tag_name = versionUpdateBean.getTag_name();//线上版本号
+                if (tag_name == null) {
+                    return;
+                }
+                try {
+                    if (tag_name.compareTo(getPackageManager().getPackageInfo(getPackageName(), 0).versionName) != 0) {
+                        //发现新版本
+                        new UpdateDialogHelper(HomeActivity.this, versionUpdateBean).show();
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

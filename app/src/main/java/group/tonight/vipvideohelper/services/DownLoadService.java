@@ -53,7 +53,6 @@ public class DownLoadService extends Service {
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .edit()
                         .putLong(Consts.KEY_LAST_DOWNLOAD_ID, manager.enqueue(down))
-                        .putInt(Consts.KEY_LAST_VERSION_ID, assetsBeanId)
                         .apply();
             }
         } catch (Exception e) {

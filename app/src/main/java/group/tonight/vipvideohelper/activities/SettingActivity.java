@@ -30,6 +30,7 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
     private ImageView mShareAppImageView;
     private VersionUpdateBean mVersionUpdateBean;
     private View mNewVersionView;
+    private String mTag_name;
 
     @Override
     protected int setActivityTitle() {
@@ -47,12 +48,18 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
 
         VersionUpdateTask versionUpdateTask = new VersionUpdateTask();
         versionUpdateTask.observe(this, new Observer<VersionUpdateBean>() {
+
+
             @Override
             public void onChanged(@Nullable VersionUpdateBean versionUpdateBean) {
                 if (versionUpdateBean == null) {
                     return;
                 }
                 List<VersionUpdateBean.AssetsBean> assetsBeanList = versionUpdateBean.getAssets();
+                mTag_name = versionUpdateBean.getTag_name();
+                if (mTag_name == null) {
+                    return;
+                }
                 if (assetsBeanList == null) {
                     return;
                 }
@@ -60,13 +67,18 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
                     return;
                 }
                 VersionUpdateBean.AssetsBean assetsBean = assetsBeanList.get(0);
-                Bitmap bitmap = QRCodeUtils.createQRCodeWithLogo(assetsBean.getBrowser_download_url(), BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+                Bitmap decodeResource = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                Bitmap bitmap = QRCodeUtils.createQRCodeWithLogo(assetsBean.getBrowser_download_url(), decodeResource);
                 mShareAppImageView.setImageBitmap(bitmap);
 
-                if (PrefUtils.get().getInt(Consts.KEY_LAST_VERSION_ID, 0) < assetsBean.getId()) {
-                    //发现新版本
-                    mVersionUpdateBean = versionUpdateBean;
-                    mNewVersionView.setVisibility(View.VISIBLE);
+                try {
+                    if (mTag_name.compareTo(getPackageManager().getPackageInfo(getPackageName(), 0).versionName) != 0) {
+                        //发现新版本
+                        mVersionUpdateBean = versionUpdateBean;
+                        mNewVersionView.setVisibility(View.VISIBLE);
+                    }
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -108,6 +120,7 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
                         .show();
                 break;
             case R.id.version:
+
                 if (mVersionUpdateBean == null) {
                     Toast.makeText(SettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT).show();
                 } else {

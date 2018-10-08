@@ -22,9 +22,9 @@ public class App extends Application {
         CrashHandler.getInstance().init(this);
         PrefUtils.init(this);
         okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(2000, TimeUnit.MILLISECONDS)
-                .readTimeout(2000, TimeUnit.MILLISECONDS)
-                .writeTimeout(2000, TimeUnit.MILLISECONDS)
+//                .connectTimeout(2000, TimeUnit.MILLISECONDS)
+//                .readTimeout(2000, TimeUnit.MILLISECONDS)
+//                .writeTimeout(2000, TimeUnit.MILLISECONDS)
                 .build();
         //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
 //        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
