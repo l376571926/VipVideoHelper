@@ -31,31 +31,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".receivers.GlobalBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-                <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
-                <action android:name="android.intent.action.VIEW_DOWNLOADS" />
-            </intent-filter>
-        </receiver>
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="@string/file_provider_authorities"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/permission_file_paths" />
-        </provider>
-
-        <service android:name=".services.DownLoadService" />
-
         <activity android:name=".activities.SettingActivity" />
         <activity
             android:name=".activities.BaiduActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.ApiManageActivity" />
+        <activity android:name=".activities.ActionViewActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.HistoryVersionActivity" />
+        <activity android:name=".activities.HistoryVersionDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -85,6 +85,7 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
 
         findViewById(R.id.parse).setOnClickListener(this);
         findViewById(R.id.manage).setOnClickListener(this);
+        findViewById(R.id.history).setOnClickListener(this);
 
         try {
             versionTextView.setText(getString(R.string.current_version_name_place_holder, getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
@@ -117,8 +118,10 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
                         })
                         .show();
                 break;
+            case R.id.history:
+                startActivity(new Intent(this, HistoryVersionActivity.class));
+                break;
             case R.id.version:
-
                 if (mVersionUpdateBean == null) {
                     Toast.makeText(SettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT).show();
                 } else {

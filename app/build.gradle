@@ -41,6 +41,9 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    dataBinding {
+        enabled true
+    }
 }
 
 dependencies {
@@ -86,4 +89,7 @@ dependencies {
     })
     implementation 'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
     implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.4@aar'
+
+    //DownloadManager帮助类自动下载url对应的apk并安装，兼容android 6.0、android 8.0
+    implementation 'com.github.tonightstudio:downloadmanagerhelper:1.0'
 }

@@ -17,9 +17,9 @@ import okhttp3.Response;
 
 public class VersionUpdateTask extends LiveData<VersionUpdateBean> implements Runnable {
     //获取所有发布的版本
-    private static final String ALL = "https://api.github.com/repos/l376571926/VipVideoHelper/releases";
+    public static final String ALL = "https://api.github.com/repos/l376571926/VipVideoHelper/releases";
     //最新版apk地址
-    public static final String LATEST = "https://api.github.com/repos/l376571926/VipVideoHelper/releases/latest";
+    private static final String LATEST = "https://api.github.com/repos/l376571926/VipVideoHelper/releases/latest";
 
     public VersionUpdateTask() {
         new Thread(this).start();
@@ -27,14 +27,11 @@ public class VersionUpdateTask extends LiveData<VersionUpdateBean> implements Ru
 
     @Override
     public void run() {
-
         Request request = new Request.Builder()
                 .get()
                 .url(LATEST)
                 .build();
         try {
-//            Response response = OkGo.<String>get(LATEST)
-//                    .execute();
             Response response = App.getOkHttpClient().newCall(request).execute();
             int code = response.code();
             if (code != 200) {
@@ -54,13 +51,7 @@ public class VersionUpdateTask extends LiveData<VersionUpdateBean> implements Ru
             if (assetsBeanList.isEmpty()) {
                 return;
             }
-            VersionUpdateBean.AssetsBean assetsBean = assetsBeanList.get(0);
-            String browser_download_url = assetsBean.getBrowser_download_url();
-            int size = assetsBean.getSize();
-            int download_count = assetsBean.getDownload_count();
-            String content_type = assetsBean.getContent_type();
-
-//            postValue(assetsBean);
+            postValue(versionUpdateBean);
         } catch (IOException e) {
             e.printStackTrace();
             KLog.e("run: " + e.getMessage());
