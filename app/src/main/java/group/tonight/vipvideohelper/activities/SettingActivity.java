@@ -48,8 +48,6 @@ public class SettingActivity extends BaseBackActivity implements View.OnClickLis
 
         VersionUpdateTask versionUpdateTask = new VersionUpdateTask();
         versionUpdateTask.observe(this, new Observer<VersionUpdateBean>() {
-
-
             @Override
             public void onChanged(@Nullable VersionUpdateBean versionUpdateBean) {
                 if (versionUpdateBean == null) {

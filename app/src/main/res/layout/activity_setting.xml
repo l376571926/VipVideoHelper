@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -59,12 +60,15 @@
             android:gravity="center_vertical"
             android:text="当前版本：1.0" />
 
+        <!--
+        当布局中使用了vector矢量图时，src要换成srcCompat，否则android4.4会闪退
+        -->
         <ImageView
             android:id="@+id/new_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/circle_medium"
             android:visibility="gone"
+            app:srcCompat="@drawable/circle_medium"
             tools:visibility="visible" />
     </LinearLayout>
 

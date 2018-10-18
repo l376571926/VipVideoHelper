@@ -1,6 +1,8 @@
 package group.tonight.vipvideohelper.other;
 
 import android.arch.lifecycle.LiveData;
+import android.os.Looper;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.socks.library.KLog;
@@ -25,11 +27,14 @@ public class VersionUpdateTask extends LiveData<VersionUpdateBean> implements Ru
 
     @Override
     public void run() {
+
         Request request = new Request.Builder()
                 .get()
                 .url(LATEST)
                 .build();
         try {
+//            Response response = OkGo.<String>get(LATEST)
+//                    .execute();
             Response response = App.getOkHttpClient().newCall(request).execute();
             int code = response.code();
             if (code != 200) {
@@ -59,6 +64,9 @@ public class VersionUpdateTask extends LiveData<VersionUpdateBean> implements Ru
         } catch (IOException e) {
             e.printStackTrace();
             KLog.e("run: " + e.getMessage());
+            Looper.prepare();
+            Toast.makeText(App.get(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            Looper.loop();
         }
     }
 }
