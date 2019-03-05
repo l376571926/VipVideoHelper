@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class VipBaseUrlProvider {
-    //闺蜜的战争
-    private static String TEST_VIP_VIDEO_URL = "http://www.iqiyi.com/v_19rr1num7g.html";
+    //白蛇：缘起
+    private static String TEST_VIP_VIDEO_URL = "https://www.iqiyi.com/v_19rr575vxk.html";
 
     public static final String DEFAULT_VIP_URL_0 = "http://yun.mt2t.com/yun?url=";
     public static final String DEFAULT_VIP_URL_1 = "http://jx.618g.com/?url=";
